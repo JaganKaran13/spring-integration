@@ -13,4 +13,9 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
     }
+
+    @Override
+    public Product createProduct(Product product) {
+        return new Product(2,"New Product");
+    }
 }

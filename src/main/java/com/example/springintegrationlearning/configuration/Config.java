@@ -1,9 +1,11 @@
 package com.example.springintegrationlearning.configuration;
 
+import com.example.springintegrationlearning.model.Product;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ResolvableType;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.http.HttpHeaders;
@@ -41,6 +43,19 @@ public class Config {
     }
 
     @Bean
+    public IntegrationFlow httpPostFlow() {
+        return IntegrationFlows.from("httpPostChannel").handle("productEndpoint", "post").get();
+    }
+
+    @Bean
+    public IntegrationFlow httpPostPutFlow() {
+        return IntegrationFlows.from(httpPostPutGate()).channel("routeRequest").route("headers.http_requestMethod",
+                m -> m.prefix("http").suffix("Channel")
+                        .channelMapping("PUT", "Put")
+                        .channelMapping("POST", "Post")
+        ).get();
+    }
+    @Bean
     public MessagingGatewaySupport httpGetGate() {
         HttpRequestHandlingMessagingGateway handler = new HttpRequestHandlingMessagingGateway();
         handler.setRequestMapping(createMapping(new HttpMethod[]{HttpMethod.GET}, "/product/{productId}"));
@@ -55,7 +70,16 @@ public class Config {
         requestMapping.setConsumes("application/json");
         requestMapping.setProduces("application/json");
         requestMapping.setPathPatterns(path);
-
         return requestMapping;
+    }
+
+    @Bean
+    public MessagingGatewaySupport httpPostPutGate() {
+        HttpRequestHandlingMessagingGateway handler = new HttpRequestHandlingMessagingGateway();
+        handler.setRequestMapping(createMapping(new HttpMethod[]{HttpMethod.POST}, "/product"));
+        handler.setStatusCodeExpression(parser().parseExpression("T(org.springframework.http.HttpStatus).NO_CONTENT"));
+        handler.setRequestPayloadType(ResolvableType.forClass(Product.class));
+        handler.setHeaderMapper(headerMapper());
+        return handler;
     }
 }

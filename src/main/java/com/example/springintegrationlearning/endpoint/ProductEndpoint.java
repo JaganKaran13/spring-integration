@@ -31,4 +31,13 @@ public class ProductEndpoint {
                 .setHeader(STATUSCODE_HEADER, HttpStatus.OK)
                 .build();
     }
+
+    public Message<?> post(Message<Product> msg) {
+        Product product = msg.getPayload();
+        Product createdProduct = service.createProduct(product);
+        return MessageBuilder.withPayload(createdProduct)
+                .copyHeadersIfAbsent(msg.getHeaders())
+                .setHeader(STATUSCODE_HEADER, HttpStatus.OK)
+                .build();
+    }
 }
