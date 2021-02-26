@@ -1,6 +1,6 @@
-#Spring Integration
+# Spring Integration
 
-##What is spring integration?
+## What is spring integration?
 1. Enable light weight messaging platforms
 2. Supports integration with external systems.
 3. Adapter provides high level abstraction for support.
@@ -10,8 +10,8 @@ Pipes => transport messages.
 Filer => Produce or consume messages.
 
 
-##Integration Components:
-###Message:
+## Integration Components:
+### Message:
 1. Holds the message and headers.
    Message Channel:
 1. Represents the pipes in the paradigm
@@ -21,7 +21,7 @@ Filer => Produce or consume messages.
 2. Application code doesn’t have any info on messaging framework.
 3. Similar in HTTP MVC , it handles requests, in MessageEndpoint it handles messages.
 
-##Main Components:
+## Main Components:
 1. Message Transformer
     1. It is responsible for converting messages and manipulating the headers
     2. Most Common use case is to convert the payload from one dataType to another.
@@ -49,4 +49,4 @@ Filer => Produce or consume messages.
 6. FluxMessageChannel
 7. Scoped Channel
 
-###****** Checkout each branch for the specific task. JPA/JDBC are Work in progress ******
+### ****** Checkout each branch for the specific task. JPA/JDBC are Work in progress ******
